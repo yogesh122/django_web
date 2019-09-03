@@ -1,0 +1,14 @@
+{% extends "registrar/base.html" %}
+{% block content %}
+  <div class="container">
+    <h1>Welcome {{user.first_name|title}}</h1>
+    <h3>Here is option to download the template</h3>
+    <br>
+    <a class="blog-header-logo text-dark" href="{% url 'template_download' fileName='add_student_template' %}">
+      Student Template
+      <span class="glyphicon glyphicon-download">
+      </span>
+    </a>
+    
+  </div>
+{% endblock %}

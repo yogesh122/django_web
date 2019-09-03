@@ -1,0 +1,126 @@
+{% extends "instructor/base.html" %}
+{% load bootstrap3 %}
+{% block instructor_body %}
+<div class="container">
+  <br><br>
+<div class="jumbotron">
+
+  <h3>List of files uploaded by {{department_name|title }} Department(s):</h3>
+
+<table class="table">
+<thead>
+  <tr>
+    <th scope="col">Sr No.</th>
+    <th scope="col">File Name</th>
+    <th scope="col">Uploaded by:</th>
+    <th scope="col">Approved By Hod:</th>
+    <th scope="col">Approved By Dean:</th>
+    <th scope="col">Approved By Registrar:</th>
+    <th scope="col">Download File</th>
+  </tr>
+</thead>
+<tbody>
+  {% for file in upload_file_list %}
+
+  <tr>
+    <!-- Sr No -->
+    <td scope="row">{{ forloop.counter }}</td>
+    <!-- File Name -->
+    <td>{{file}}</td>
+    <!--  Uploaded By-->
+    <td>{{user.first_name}} {{user.last_name}} </td>
+    <!-- Approved by dean -->
+    <td>
+      <p>
+          {% if file.file_rejected == False%}
+              {% if file.file_uploaded_hod == True %}
+              Approved
+              <span class="glyphicon glyphicon-ok">
+              {% else %}
+              Pending
+              <span class="glyphicon glyphicon-remove">
+              {% endif %}
+              </span>
+          {% else %}
+              {{file.file_status}}
+              <span class="glyphicon glyphicon-remove">  </span>
+          {% endif %}
+      </p>
+    </td>
+    <!-- Approved by Dean -->
+    <td>
+      <p>
+        {% if file.file_rejected == False %}
+            {% if file.file_uploaded_dean == True %}
+            Approved
+            <span class="glyphicon glyphicon-ok">
+            {% else %}
+            Pending
+            <span class="glyphicon glyphicon-remove">
+            {% endif %}
+            </span>
+        {% else %}
+              {{file.file_status}}
+              <span class="glyphicon glyphicon-remove">  </span>
+        {% endif %}
+      </p>
+    </td>
+
+    <!--  Approved by registrar-->
+    <td>
+      <p>
+      {% if file.file_rejected == False %}
+          {% if file.file_uploaded_registrar == True %}
+          Approved
+          <span class="glyphicon glyphicon-ok">
+          {% else %}
+          Pending
+          <span class="glyphicon glyphicon-remove">
+          {% endif %}
+          </span>
+        {% else %}
+            {{file.file_status}}
+            <span class="glyphicon glyphicon-remove">  </span>
+        {% endif %}
+      </p>
+    </td>
+    <!-- Download File -->
+    <td>
+      {% if file.file_rejected == False %}
+      <a class="blog-header-logo text-dark" href="{% url 'downloadFile' fileName=file %}">
+        Download
+        <span class="glyphicon glyphicon-download">
+        </span>
+      </a>
+      {%else%}
+
+        No Option to Download
+      {%endif%}
+
+    </td>
+  </tr>
+  {% empty %}
+  <tr>
+    <td>
+      No File Uploaded
+    </td>
+
+  </tr>
+  {% endfor %}
+
+</tbody>
+</table>
+
+  <script type="text/javascript">
+  
+    var json=document.getElementById('hiddenFrame');
+
+    console.log("Lolll");
+    console.log(json.src);
+    console.log(json1);
+  </script>
+
+
+
+
+{% endblock %}

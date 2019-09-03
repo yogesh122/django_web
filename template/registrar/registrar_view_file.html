@@ -1,0 +1,176 @@
+
+{% extends "registrar/base.html" %}
+{% load bootstrap3 %}
+{% block content %}
+<div class="container">
+  <br><br>
+<div class="jumbotron">
+
+<h3>List of files uploaded by professor(s):</h3>
+
+<table class="table">
+<thead>
+  <tr>
+    <th scope="col">Sr No.</th>
+    <th scope="col">File Name</th>
+    <th scope="col">Approved File by HOD</th>
+    <th scope="col">Approved File by Dean</th>
+    <th scope="col">Approved by Registrar</th>
+    <th scope="col">Download File</th>
+    <th scope="col">Release Result</th>
+  </tr>
+</thead>
+<tbody>
+  {% for file in upload_file_list %}
+  <tr>
+    <!--  Sr No-->
+    <th scope="row">{{ forloop.counter }}</th>
+    <!-- File Name -->
+    <td>{{file}} </td>
+    <!-- HOD Approve -->
+        <td>
+          <p>
+            {% if file.file_rejected == False %}
+                {% if file.file_uploaded_hod == True %}
+                  Approved
+                  <span class="glyphicon glyphicon-ok"></span>
+                {% elif file.file_uploaded_hod == False %}
+                  Pending by HOD
+                  <span class="glyphicon glyphicon-remove"></span>
+                {% endif %}
+
+            {% else %}
+              {{file.file_status}}
+              <span class="glyphicon glyphicon-remove"> </span>
+            {% endif %}
+
+          </p>
+        </td>
+        <!-- Dean Approve -->
+        <td>
+          <p>
+            {% if file.file_rejected == False %}
+                {% if file.file_uploaded_dean == True %}
+                Approved
+                <span class="glyphicon glyphicon-ok">
+                {% else %}
+                Pending
+                <span class="glyphicon glyphicon-remove">
+                {% endif %}
+                </span>
+            {% else %}
+                  {{file.file_status}}
+                  <span class="glyphicon glyphicon-remove">  </span>
+            {% endif %}
+          </p>
+        </td>
+
+        <!--  Registrar Approve-->
+        <td>
+
+            {% if file.file_rejected == False%}
+
+                  {% if file.file_uploaded_registrar == False and file.file_uploaded_hod == True and file.file_uploaded_dean == True %}
+
+                      <div class="row">
+                        <div class="col-3">
+                          <form action="{% url 'approve_marks_registrar' %}" enctype="multipart/form-data" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="get_file_name" value="{{ file }}">
+                            <button type="submit" class="btn btn-primary">Approve</button>
+                          </form>
+                        </div>
+                        &nbsp;&nbsp;&nbsp;
+                        <div class="col-3">
+                          <form action="{% url 'reject_marks_file' %}" enctype="multipart/form-data" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="get_file_name" value="{{ file }}">
+                            <button type="submit" class="btn btn-primary">Reject</button>
+                          </form>
+                        </div>
+
+                      </div>
+
+                  {% elif file.file_uploaded_registrar == True and file.file_uploaded_hod == True %}
+                    <p>
+                      Approved
+                      <span class="glyphicon glyphicon-ok">  </span>
+                    </p>
+                  {% else %}
+                      <p>
+                          Pending by HOD
+                          <span class="glyphicon glyphicon-remove">  </span>
+                      </p>
+                  {% endif %}
+
+            {% elif file.file_uploaded_registrar == False and file.file_rejected_reason == False  %}
+                    <form action="{% url 'reject_marks_reason' %}" enctype="multipart/form-data" method="post">
+                      {% csrf_token %}
+                      {{ reject_reason_form.as_p }}
+                      <input type="hidden" name="get_file_name" value="{{ file.id }}">
+                      <button type="submit" class="btn btn-success">Submit</button>
+                    </form>
+
+            {% else %}
+              <p>
+                  {{file.file_status}}
+                  <span class="glyphicon glyphicon-remove">  </span>
+              </p>
+
+            {% endif %}
+        </td>
+        <!--  Download File-->
+        <td>
+          {% if file.file_rejected == False %}
+          <a class="blog-header-logo text-dark" href="{% url 'downloadFile' fileName=file %}">
+              Download
+              <span class="glyphicon glyphicon-download">
+              </span>
+          </a>
+          {%else%}
+            No Option to Download
+          {%endif%}
+        </td>
+        <!-- Release Marks -->
+        <td>
+          {% if file.file_rejected == False %}
+            {% if file.file_uploaded_hod == True and file.file_uploaded_dean == True and file.file_uploaded_registrar == True and file.marks_release == False %}
+              <form action="{% url 'release_marks' %}" enctype="multipart/form-data" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="get_file_name" value="{{ file }}">
+                <button type="submit" class="btn btn-primary">Release</button>
+              </form>
+            {% elif file.marks_release == True %}
+              <p>
+                File marks are released.
+              </p>
+
+            {% else %}
+                <p>
+                  File not approved yet.
+                </p>
+            {% endif %}
+
+          {%else%}
+            File is rejected
+          {%endif%}
+        </td>
+
+  </tr>
+
+  {% empty %}
+  <tr>
+    <td>
+      No File Uploaded
+    </td>
+  </tr>
+  {% endfor %}
+
+</tbody>
+</table>
+
+
+
+
+
+{% endblock %}

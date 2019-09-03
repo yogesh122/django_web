@@ -1,0 +1,11 @@
+{% extends "student/base.html" %}
+{% block content %}
+  <div class="container">
+    <h1>Hello  {{user.first_name|title}}</h1>
+    <h3>To view your result click on result button.</h3>
+  </div>
+
+<br><br>
+<a class="btn btn-outline-primary btn-lg" href="{% url 'student_result' %}"  role="button">Result</a>
+
+{% endblock %}

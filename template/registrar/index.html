@@ -1,0 +1,11 @@
+{% extends "registrar/base.html" %}
+
+{% block content %}
+<h1>Welcome {{user.first_name|title}}</h1>
+<h3>Choose from the above options</h3>
+<br>
+<br>
+<a class="btn btn-outline-primary btn-lg" href="{% url 'view_file_upload' %}"  role="button">View Uploaded File</a>
+<a class="btn btn-outline-primary btn-lg" href="{% url 'add_multiple_student' %}"  role="button">Add Student</a>
+
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "student/base.html" %}
+
+{% block content %}
+
+<div class="container">
+<br><br>
+  <div class="jumbotron">
+    <h1>Your Result</h1>
+    <table class="table">
+    <thead>
+      <tr>
+
+        <th scope="col">Sem ID</th>
+        <th scope="col">Course ID</th>
+        <th scope="col">Course Name</th>
+        <th scope="col">Grade</th>
+        <th scope="col">Download Result</th>
+
+      </tr>
+
+    </thead>
+    <tbody>
+
+      {% for i in result_dict %}
+
+      <tr>
+        {% if i.total_cgpa %}
+            <h4>You CGPA is {{ i.total_cgpa }} </h4>
+        {% else %}
+
+          <td>{{ i.sem_id }}</td>
+          <td>{{ i.course_id }}</td>
+          <td>{{ i.course_name }}</td>
+          <td>{{ i.std_grade }}</td>
+          <td><a class="blog-header-logo text-dark" target="_blank" href="{% url 'result_download' %}">
+              Download
+              <span class="glyphicon glyphicon-download">
+              </span>
+            </a>
+          </td>
+
+        {% endif %}
+
+      </tr>
+      {% empty %}
+      <tr>
+        <td>No result uploaded</td>
+      </tr>
+
+      {% endfor %}
+
+    </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

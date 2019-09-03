@@ -1,0 +1,13 @@
+{% extends "instructor/base_hod.html" %}
+{% block instructor_body %}
+  <div class="container">
+    <h1>Welcome {{user.first_name|title}}</h1>
+    <h3>Choose from the above options</h3>
+  </div>
+  <br>
+  <br>
+
+  <a class="btn btn-outline-primary btn-lg" href="{% url 'view_file_upload' %}"  role="button">View Uploaded Files</a>
+  <a class="btn btn-outline-primary btn-lg" href="{% url 'instructor_file_upload' %}"  role="button">Upload File</a>
+<a class="btn btn-outline-primary btn-lg" href="{% url 'add_multiple_course' %}"  role="button">Add Course</a>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "registrar/base.html" %}
+
+{% block content %}
+<h1>Welcome Registrar {{user.first_name|title}}</h1>
+
+<h4>Course Added to database</h4>
+<div class="container">
+  <!-- Content here -->
+  <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Course Id:</th>
+      <th scope="col">Sem Id:</th>
+      <th scope="col">Message</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for course in message.course_added %}
+      <tr>
+        <td>{{course.course_id}}</td>
+        <td>{{course.sem_id}}</td>
+        <td>{{course.error_message}}</td>
+      </tr>
+      {% empty %}
+      <td>No details</td>
+
+      {% endfor %}
+
+  </tbody>
+</table>
+
+
+</div>
+<br><br>
+
+<h4>Course does not get added</h4>
+<div class="container">
+  <!-- Content here -->
+  <!-- Content here -->
+  <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Course Id:</th>
+      <th scope="col">Sem Id:</th>
+      <th scope="col">Message</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for course in message.course_error %}
+      <tr>
+        <td>{{course.course_id}}</td>
+        <td>{{course.sem_id}}</td>
+        <td>{{course.error_message}}</td>
+      </tr>
+      {% empty %}
+          <p>No details</p>
+      {% endfor %}
+
+  </tbody>
+</table>
+
+</div>
+<br><br>
+
+{% endblock %}

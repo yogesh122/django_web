@@ -1,0 +1,50 @@
+{% extends "registrar/base.html" %}
+
+{% block content %}
+<h1>Welcome Registrar {{user.first_name|title}}</h1>
+
+<h4>Student already exists</h4>
+<div class="container">
+  <!-- Content here -->
+
+  <ul class="list-group">
+    {% for student in message.student_exist %}
+      <li class="list-group-item"> {{student}} </li>
+    {% empty %}
+      <p>No details</p>
+    {% endfor %}
+  </ul>
+</div>
+<br><br>
+
+<h4>Student Added to database</h4>
+<div class="container">
+  <!-- Content here -->
+
+  <ul class="list-group">
+    {% for student in message.student_added %}
+
+      <li class="list-group-item"> {{student}} </li>
+
+
+    {% empty %}
+      <p>No details</p>
+    {% endfor %}
+  </ul>
+</div>
+<br><br>
+
+<h4>Student Not able to add in database</h4>
+<div class="container">
+  <!-- Content here -->
+
+  <ul class="list-group">
+    {% for student in message.student_error %}
+      <li class="list-group-item"> {{student}} </li>
+    {% empty %}
+      <p>No details</p>
+    {% endfor %}
+  </ul>
+</div>
+<br><br>
+{% endblock %}

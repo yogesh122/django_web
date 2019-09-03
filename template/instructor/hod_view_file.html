@@ -1,0 +1,147 @@
+{% extends "instructor/base_hod.html" %}
+{% load bootstrap3 %}
+{% block instructor_body %}
+<div class="container">
+  <br><br>
+<div class="jumbotron">
+
+<h3>List of files uploaded by professor in {{department_name|title}} department(s) :</h3>
+
+<table class="table">
+<thead>
+  <tr>
+    <th scope="col">Sr No.</th>
+    <th scope="col">File Name</th>
+    <th scope="col">Approved File</th>
+    <th scope="col">Approved by Dean</th>
+    <th scope="col">Approved by Registrar</th>
+    <th scope="col">Download File</th>
+  </tr>
+</thead>
+<tbody>
+  {% for file in upload_file_list %}
+  <tr>
+    <!-- Sr No -->
+    <th scope="row">{{ forloop.counter }}</th>
+    <!-- File Name -->
+    <td>{{file}} </td>
+    <!-- Approve File -->
+    <td>
+      <!--  If file is not approved than show button-->
+        {% if file.file_rejected == False %}
+
+              {% if file.file_uploaded_hod == False %}
+                  <div class="row">
+
+                    <div class="col-3">
+                      <form action="{% url 'approved_by_hod' %}" enctype="multipart/form-data" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="get_file_name" value="{{ file }}">
+                        <button type="submit" class="btn btn-primary">Approve</button>
+                      </form>
+                    </div>
+                    &nbsp;&nbsp;&nbsp;
+                    <div class="col-3">
+                      <form action="{% url 'reject_marks_file' %}" enctype="multipart/form-data" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="get_file_name" value="{{ file }}">
+                        <button type="submit" class="btn btn-primary">Reject</button>
+                      </form>
+                    </div>
+
+                </div>
+
+              {% elif file.file_uploaded_hod == True %}
+                <p>
+                  Approved
+                <span class="glyphicon glyphicon-ok">  </span>
+                </p>
+              {% else %}
+                <p>
+                  No update
+                </p>
+              {% endif %}
+        {% elif file.file_uploaded_hod == False and file.file_rejected_reason == False  %}
+                      <form action="{% url 'reject_marks_reason' %}" enctype="multipart/form-data" method="post">
+                        {% csrf_token %}
+                        {{ reject_reason_form.as_p }}
+                        <input type="hidden" name="get_file_name" value="{{ file.id }}">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                      </form>
+        {% else %}
+            {{file.file_status}}
+            <span class="glyphicon glyphicon-remove"> </span>
+        {%endif%}
+    </td>
+<!--  Approve by dean-->
+      <td>
+        <p>
+          {% if file.file_rejected == False %}
+              {% if file.file_uploaded_dean == True %}
+              Approved
+              <span class="glyphicon glyphicon-ok">
+              {% else %}
+              Pending
+              <span class="glyphicon glyphicon-remove">
+              {% endif %}
+              </span>
+          {% else %}
+                {{file.file_status}}
+                <span class="glyphicon glyphicon-remove">  </span>
+          {% endif %}
+        </p>
+      </td>
+<!--  approve by Registrar-->
+    <td>
+      <p>
+        {% if file.file_rejected == False %}
+            {% if file.file_uploaded_registrar == True %}
+            Approved
+            <span class="glyphicon glyphicon-ok"></span>
+            {% elif file.file_uploaded_registrar == False %}
+            Pending
+            <span class="glyphicon glyphicon-remove"></span>
+            {% else %}
+            <p>
+              No update
+            </p>
+            {% endif %}
+
+        {%else%}
+          {{file.file_status}}
+          <span class="glyphicon glyphicon-remove"> </span>
+        {%endif%}
+      </p>
+    </td>
+<!-- Download File -->
+    <td>
+      {% if file.file_rejected == False %}
+      <a class="blog-header-logo text-dark" href="{% url 'downloadFile' fileName=file %}">
+        Download
+        <span class="glyphicon glyphicon-download">
+        </span>
+      </a>
+      {%else%}
+
+        No Option to Download
+      {%endif%}
+    </td>
+
+  </tr>
+
+  {% empty %}
+  <tr>
+    <td>
+      No File Uploaded
+    </td>
+  </tr>
+  {% endfor %}
+
+</tbody>
+</table>
+
+
+
+
+
+{% endblock %}

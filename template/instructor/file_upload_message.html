@@ -1,0 +1,9 @@
+{% extends "instructor/base.html" %}
+
+{% block instructor_body %}
+
+<h1>{{ file_message }}  </h1>
+<h2>Upload another file: </h2>
+<a class="nav-link" href="{% url 'instructor_file_upload' %}">Upload Another File <span class="sr-only"></span></a>
+
+{% endblock %}

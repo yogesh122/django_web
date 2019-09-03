@@ -1,0 +1,20 @@
+{% extends "instructor/base.html" %}
+{% block instructor_body %}
+  <div class="container">
+    <h1>Welcome {{user.first_name|title}}</h1>
+    <h3>Here is option to download the template</h3>
+    <br>
+    <a class="blog-header-logo text-dark" href="{% url 'template_download' fileName='marks_template' %}">
+      Marks Template
+      <span class="glyphicon glyphicon-download">
+      </span>
+    </a>
+    <br><br>
+    <a class="blog-header-logo text-dark" href="{% url 'template_download' fileName='add_course_template' %}">
+      Course Template
+      <span class="glyphicon glyphicon-download">
+      </span>
+    </a>
+  </div>
+
+{% endblock %}
